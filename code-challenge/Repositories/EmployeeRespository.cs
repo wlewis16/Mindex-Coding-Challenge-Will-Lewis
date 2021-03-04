@@ -27,13 +27,11 @@ namespace challenge.Repositories
             return employee;
         }
 
-        public async Task<Employee> GetById(string id)
+        public Employee GetById(string id)
         {
+            // Since DirectReports is a non-primitive type (it's a List), we need to make sure our query is explicitly including it.
+            Employee employee = _employeeContext.Employees.Include(e => e.DirectReports).SingleOrDefaultAsync(e => e.EmployeeId == id).Result;
 
-            // Call an async function and await for it. Without this, the returned employee will always have null directReports
-            await _employeeContext.Employees.ToListAsync();
-
-            Employee employee = _employeeContext.Employees.SingleOrDefaultAsync(e => e.EmployeeId == id).Result;
             return employee;
         }
 

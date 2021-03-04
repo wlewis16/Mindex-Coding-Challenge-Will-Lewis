@@ -24,7 +24,7 @@ namespace challenge.Services
             if (String.IsNullOrEmpty(id))
                 return null;
 
-            Employee employee = _employeeRepository.GetById(id).Result;
+            Employee employee = _employeeRepository.GetById(id);
 
             if (employee != null)
                 return CreateReportingStructureHelper(employee);
