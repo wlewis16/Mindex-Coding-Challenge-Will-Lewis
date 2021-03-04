@@ -22,7 +22,10 @@ namespace challenge.Repositories
 
         public Compensation Add(Compensation compensation)
         {
-            compensation.compensationId = Guid.NewGuid().ToString();
+            // Compensation needs a primary key, but since each employee will have just one compensation,
+            // we can use the EmployeeId as the primary key.
+            compensation.compensationId = compensation.employee.EmployeeId;
+
             _compensationContext.Compensations.Add(compensation);
             _compensationContext.SaveChanges();
             return compensation;
@@ -31,8 +34,12 @@ namespace challenge.Repositories
         public Compensation GetById(string id)
         {
 
-            // Since employee and employee.DirectReports aren't primitive types, we have to explicitly include them in our query.
-            Compensation compensation = _compensationContext.Compensations.Include(e => e.employee).ThenInclude(e1 => e1.DirectReports).SingleOrDefaultAsync(c => c.employee.EmployeeId == id).Result;
+            // We need to remember to include the compensation's employee property.
+            List<Compensation> compensations = _compensationContext.Compensations
+                                              .Include(c => c.employee)
+                                              .ToListAsync().Result;
+
+            Compensation compensation = compensations.SingleOrDefault(c => c.employee.EmployeeId == id);
 
             return compensation;
         }

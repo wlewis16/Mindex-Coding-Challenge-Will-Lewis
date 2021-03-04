@@ -26,7 +26,7 @@ namespace challenge.Controllers
         [HttpPost("{id}")]
         public IActionResult CreateCompensation(String id, [FromBody] Compensation compensation)
         {
-            if (String.IsNullOrEmpty(id))
+            if (String.IsNullOrEmpty(id) || compensation == null)
                 return NotFound();
 
             Employee employee = _employeeService.GetById(id);

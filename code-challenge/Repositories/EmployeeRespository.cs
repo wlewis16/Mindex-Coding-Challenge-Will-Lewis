@@ -29,8 +29,13 @@ namespace challenge.Repositories
 
         public Employee GetById(string id)
         {
-            // Since DirectReports is a non-primitive type (it's a List), we need to make sure our query is explicitly including it.
-            Employee employee = _employeeContext.Employees.Include(e => e.DirectReports).SingleOrDefaultAsync(e => e.EmployeeId == id).Result;
+
+            // We have to make sure the DirectReports field is being included
+            List<Employee> employees = _employeeContext.Employees
+                                       .Include(e => e.DirectReports)
+                                       .ToListAsync().Result;
+
+            Employee employee = employees.SingleOrDefault(e => e.EmployeeId == id);
 
             return employee;
         }
