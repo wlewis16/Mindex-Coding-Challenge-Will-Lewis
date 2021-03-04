@@ -27,9 +27,14 @@ namespace challenge.Repositories
             return employee;
         }
 
-        public Employee GetById(string id)
+        public async Task<Employee> GetById(string id)
         {
-            return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+
+            // Call an async function and await for it. Without this, the returned employee will always have null directReports
+            await _employeeContext.Employees.ToListAsync();
+
+            Employee employee = _employeeContext.Employees.SingleOrDefaultAsync(e => e.EmployeeId == id).Result;
+            return employee;
         }
 
         public Task SaveAsync()

@@ -24,7 +24,7 @@ namespace challenge.Services
             if (String.IsNullOrEmpty(id))
                 return null;
 
-            Employee employee = _employeeRepository.GetById(id);
+            Employee employee = _employeeRepository.GetById(id).Result;
 
             if (employee != null)
                 return CreateReportingStructureHelper(employee);
@@ -61,9 +61,12 @@ namespace challenge.Services
                 {
                     numDirectReports += 1;
 
-                    for(int idx = 0; idx < currEmployee.DirectReports.Count; idx++)
+                    if (currEmployee.DirectReports != null)
                     {
-                        employees.Push(currEmployee.DirectReports[idx]);
+                        for (int idx = 0; idx < currEmployee.DirectReports.Count; idx++)
+                        {
+                            employees.Push(currEmployee.DirectReports[idx]);
+                        }
                     }
                 }
             }

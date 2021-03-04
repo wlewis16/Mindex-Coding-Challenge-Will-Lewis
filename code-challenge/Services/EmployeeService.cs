@@ -34,7 +34,7 @@ namespace challenge.Services
         {
             if(!String.IsNullOrEmpty(id))
             {
-                return _employeeRepository.GetById(id);
+                return _employeeRepository.GetById(id).Result;
             }
 
             return null;
